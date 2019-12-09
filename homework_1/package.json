@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "task1": "node .\\tasks\\task1.js",
+    "task1": "nodemon .\\tasks\\task1.js",
     "task2": "nodemon .\\tasks\\task2.js",
-    "task3-1": "npx babel-node .\\tasks\\task3.1.js",
-    "task3-2": "npx babel-node .\\tasks\\task3.2.js"
+    "task3-1": "nodemon --exec babel-node .\\tasks\\task3.1.js",
+    "task3-2": "nodemon --exec babel-node .\\tasks\\task3.2.js"
   },
   "repository": {
     "type": "git",
