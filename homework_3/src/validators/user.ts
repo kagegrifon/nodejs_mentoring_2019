@@ -3,7 +3,7 @@ import {
   creatingUserSchema,
   updatingUserSchema,
   autoSuggestUserSchema
-} from './validationSchema';
+} from './userSchema';
 
 export const validateData = (data: any, schema: any) => {
   const { error, value } = schema.validate(data);

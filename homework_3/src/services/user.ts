@@ -2,7 +2,7 @@ import {
   EditablePropsOfUser,
   UpdatingPropsOfUser,
   UserModelInterface,
-} from './tsModels';
+} from '../interfaces/user';
 
 export class UserService {
   userModel: UserModelInterface;

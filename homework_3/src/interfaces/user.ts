@@ -25,10 +25,6 @@ interface UserInDB extends GetUserResponce {
   isDeleted: boolean;
 }
 
-type Users = {
-  [propName: string]: UserInDB;
-}
-
 export interface UserModelInterface {
   addUser: (newUserData: EditablePropsOfUser) => Promise<string>;
   updateUser:(userID: string, updatedUser: EditablePropsOfUser) => Promise<void>;

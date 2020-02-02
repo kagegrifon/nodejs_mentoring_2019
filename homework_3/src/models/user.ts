@@ -1,9 +1,9 @@
-import { User } from '../../DB_utils/dbInit';
+import { User } from './userSchema';
 import { 
   EditablePropsOfUser,
   UpdatingPropsOfUser, 
   UserModelInterface
-} from './tsModels';
+} from '../interfaces/user';
 
 const { Op } = require("sequelize");
 
@@ -15,7 +15,6 @@ export class UserModel implements UserModelInterface {
 
   async addUser(newUserData: EditablePropsOfUser) {
     const { id } = await User.create(newUserData);
-    console.log("Add new user, Done. New user-id:", id);
 
     return String(id);
   }
@@ -27,7 +26,6 @@ export class UserModel implements UserModelInterface {
         isDeleted: false,
       }
     });
-    console.log(`Get user with id ${userId}, Done.`);
 
     let result = null;
 
@@ -49,8 +47,6 @@ export class UserModel implements UserModelInterface {
         id: userId
       }
     });
-
-    console.log(`Update user with id ${userId}, Done`);    
   }
 
   async removeUser(userId: string) {
@@ -59,11 +55,9 @@ export class UserModel implements UserModelInterface {
         id: userId,
         isDeleted: false,
       }
-    });
-    console.log(`Remove user with id = ${userId}, Done`);
+    });    
   }
 
-  
   async getAutoSuggestUsers(loginSubstring: string, limit: number) {
     const dbFoundUsers = await User.findAll({ limit, order: [['login', 'DESC']] }, {
       where: {
@@ -82,8 +76,6 @@ export class UserModel implements UserModelInterface {
       }
     });
     
-      
-    console.log(`Search loginSubstring=${loginSubstring}, and limit = ${limit},  Done. Found users: ${result.length}`);
     return result;
   }
 }

@@ -1,7 +1,7 @@
 import express from 'express';
-import { userRouter } from './resourses/users/controller';
+import { userRouter } from './routers/user';
 
-import { taskDescribing } from './tastDescribingLayout';
+import { taskDescribing } from './taskDescribingLayout';
 
 const app = express();
 const port = 3000;

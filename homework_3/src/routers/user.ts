@@ -1,32 +1,16 @@
 import express from 'express';
-import { Validators } from './validators';
-import { UserService } from './service';
+import { Validators } from '../validators/user';
+import { UserService } from '../services/user';
 
-import { UserModel } from './model';
+import { UserModel } from '../models/user';
 
 const userModel = new UserModel();
 const userService = new UserService(userModel);
-
-// userService.getUser('14').then(user => console.log(user));
-// userService.removeUser('13').then(() => {
-//   console.log(`delete user 13`)
-//   userService.getUser('13').then(user => console.log(user));
-// });
-
-// userService.getUser('14').then(user => console.log(user));
-// userService.createNewUser({ login: 'sdfa', password: '2342rdsf', age: 43 }).then(data =>
-//   console.log('data', data)
-// );
-// userService.updateUser('12', { login: 'vasyad1' });
-// userService.getAutoSuggestUsers('vas', 10).then(result => console.log(result));
-
 
 export const userRouter = express.Router();
 
 userRouter.get('/:userId', 
   async function (req, res) {
-    console.log(`get, params = ${req.params}`);
-
     const { userId } = req.params;
     const user = await userService.getUser(userId);
 
@@ -41,8 +25,6 @@ userRouter.get('/:userId',
 userRouter.post('/',
   Validators.createNewUser,
   async function (req, res) {
-    console.log(`create, query = ${req.query}`);
-
     try {      
       const userDTO = req.query;
       const userID = await userService.createNewUser(userDTO);
@@ -56,8 +38,6 @@ userRouter.post('/',
 userRouter.put('/:userId', 
   Validators.updateUser,
   async function (req, res) {
-    console.log(`update, params = ${req.params}, query = ${req.query}`);
-
     let reportMessage = 'Request was successful done, user was updated';
 
     try {
@@ -75,8 +55,6 @@ userRouter.put('/:userId',
 
 userRouter.delete('/:userId',
   async function (req, res) {
-    console.log(`delete, params = ${req.params}`);
-
     let reportMessage = 'Request was successful done, user was deleted';
 
     try {
@@ -95,8 +73,6 @@ userRouter.delete('/:userId',
 userRouter.get('/get-suggestions', 
   Validators.autoSuggestUser,
   async function (req, res) {
-    console.log(`get-suggestions, query = ${req.query}`);
-
     try {
       const { loginSubstring, limit } = req.query;
       
@@ -107,4 +83,3 @@ userRouter.get('/get-suggestions',
     }
   }
 );
-

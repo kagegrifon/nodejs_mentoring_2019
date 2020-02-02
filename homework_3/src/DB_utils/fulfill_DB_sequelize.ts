@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-import { SEQUELIZE_DB_PARAMS } from '../DB_connection_config';
+import { SEQUELIZE_DB_PARAMS } from '../config/DB_connection_config';
 const usersMocks = require('./dataSet/mockUsers.json');
 
 const db = new Sequelize(...SEQUELIZE_DB_PARAMS);
@@ -37,7 +37,7 @@ db
     }
   });
 
-  db.sync({ force: true }).then(() => {
+  User.sync({ force: true }).then(() => {
     User.bulkCreate(usersMocks);
   });
 
