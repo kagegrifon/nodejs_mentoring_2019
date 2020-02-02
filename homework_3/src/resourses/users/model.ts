@@ -1,99 +1,89 @@
-import { UserSearchModel } from './searchUserModel'
+import { User } from '../../DB_utils/dbInit';
+import { 
+  EditablePropsOfUser,
+  UpdatingPropsOfUser, 
+  UserModelInterface
+} from './tsModels';
 
-export interface EditablePropsOfUser {
-  login: string;
-  password: string;
-  age: number;
-}
+const { Op } = require("sequelize");
 
-export interface getUserResponce extends EditablePropsOfUser {
-  id: string;
-  login: string;
-  password: string;
-  age: number;
-}
 
-interface UserInDB extends getUserResponce {
-  login: string;
-  password: string;
-  age: number;
-  id: string;
-  isDeleted: boolean;
-}
-
-type Users = {
-  [propName: string]: UserInDB;
-}
-
-export class UserModel {
-  private counter = 1;
-  private users:Users = {};
-  private searchModel = new UserSearchModel();
-
-  public addUser(addingUser: EditablePropsOfUser): string {
-    const newID = String(this.counter++);
-    this.users[newID] = Object.assign({}, addingUser, { id: newID, isDeleted: false });
-    this.searchModel.addToSearchTable(newID, addingUser.login);
-
-    return newID;
+export class UserModel implements UserModelInterface {
+  constructor() {
+    User.sync();
   }
 
-  public removeUser(userID: string): void {
-    if (this.users[userID] === undefined) {
-      throw new Error(`There is no user with such ID = ${userID}`);
-    }
+  async addUser(newUserData: EditablePropsOfUser) {
+    const { id } = await User.create(newUserData);
+    console.log("Add new user, Done. New user-id:", id);
 
-    this.users[userID].isDeleted = true;
-    this.searchModel.removeFromSearchTable(userID, this.users[userID].login)
+    return String(id);
   }
 
-  public updateUser(userID: string, updatedUser: EditablePropsOfUser): void {
-    const updatingUser = this._getUser(userID);
-
-    if (updatingUser) {
-      // ToDo find deep joining object method in future
-      Object.assign(updatingUser, updatedUser);
-
-      const prevLogin = updatingUser.login;
-      const newLogin = updatedUser.login;
-      if (prevLogin !== newLogin) {
-        this.searchModel.changeLoginInSearchTable(userID,prevLogin, newLogin);
+  async getUser(userId: string) {
+    const [user] = await User.findAll({
+      where: {
+        id: userId,
+        isDeleted: false,
       }
-    }
-  }
+    });
+    console.log(`Get user with id ${userId}, Done.`);
 
-  public getUser(userID: string): getUserResponce | null {
-    const userFromDB = this._getUser(userID);
     let result = null;
 
-    if (userFromDB) {
-      const { isDeleted, ...avaliableData } = userFromDB; 
-      result = avaliableData;
+    if (user) {
+      result = {
+        id: user.id,
+        login: user.login,
+        password: user.password,
+        age: user.age,
+      };
     }
-
     return result;
   }
 
-  public getAutoSuggestUsers(loginSubstring: string, limit: number): getUserResponce[] {
-    const userIDs = this.searchModel.getAutoSuggestUserIDs(loginSubstring, limit);
-
-    const result = userIDs
-      .map((userId: string) => this.getUser(userId))
-      .filter((user) => user !== null);
-
-    (result as getUserResponce[]).sort((user1, user2) => {
-      const stringCompare = user1?.login.toLowerCase() > user2?.login.toLowerCase();
-      return stringCompare ? 1 : -1;
+  async updateUser(userId: string, updatedUserData: UpdatingPropsOfUser) {
+    await User.update(updatedUserData, {
+      where: {
+        isDeleted: false,
+        id: userId
+      }
     });
-    return result as getUserResponce[];
+
+    console.log(`Update user with id ${userId}, Done`);    
   }
 
-  private _getUser(userID: string):UserInDB | null {
-    let result = null;
-    if (this.users[userID] && !this.users[userID].isDeleted) {
-      result = this.users[userID];
-    }
+  async removeUser(userId: string) {
+    await User.update({ isDeleted: true }, {
+      where: {
+        id: userId,
+        isDeleted: false,
+      }
+    });
+    console.log(`Remove user with id = ${userId}, Done`);
+  }
 
+  
+  async getAutoSuggestUsers(loginSubstring: string, limit: number) {
+    const dbFoundUsers = await User.findAll({ limit, order: [['login', 'DESC']] }, {
+      where: {
+        isDeleted: false,
+        login: {
+          [Op.like]: loginSubstring,
+        }
+      }
+    });
+    const result = dbFoundUsers.map((dbUser: any) => {
+      return {
+        id: dbUser.id,
+        login: dbUser.login,
+        password: dbUser.password,
+        age: dbUser.age,
+      }
+    });
+    
+      
+    console.log(`Search loginSubstring=${loginSubstring}, and limit = ${limit},  Done. Found users: ${result.length}`);
     return result;
   }
 }

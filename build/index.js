@@ -1,46 +1,44 @@
-import express from 'express';
-import { userRouter } from './resourses/users/controller';
-
-// import knex from 'knex';
-
-// const dbConnectionParams = {
-//   client: 'pg',
-//   connection: {
-//     host : 'localhost',
-//     user : 'postgres',
-//     password : 'dev',
-//     database : 'node_hero'
-//   }
-// };
-
-// const knexDB = knex(dbConnectionParams);
-// knexDB.schema.hasTable('users').then(function(exists) {
-//   console.log('The table users isExist = ', exists);
-//   if (!exists) {
-//     return knexDB.schema.createTable('users', function(t) {
-//       t.increments('id').primary();
-//       t.string('first_name', 100);
-//       t.string('last_name', 100);
-//     });
-//   }
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+// import pg from 'pg';
+// var PGClient = require('pg').Client;
+// var initDBConnectParams = 'postgres://postgres:dev@localhost/node_hero';
+// var pg = new PGClient(initDBConnectParams);
+// pg.connect();
+// pg.query('select * from users', function (err, results) {
+//     if (err) {
+//         console.log(err);
+//     }
+//     var json = JSON.stringify(results);
+//     console.log(json);
 // });
 
-// const PGClient = require('pg').Client;
-// const initDBConnectParams = 'postgres://postgres:dev@localhost/node_hero';
+import knex from 'knex';
 
-// const pg = new PGClient(initDBConnectParams);
+const dbConnectionParams = {
+  client: 'pg',
+  connection: {
+    host : 'localhost',
+    user : 'postgres',
+    password : 'dev',
+    database : 'node_hero'
+  }
+};
 
-// pg.connect();
-
-// pg.query('select * from users', (err: Error, results: any) => {
-//   if (err) {
-//     console.log(err);
-//   }
-
-//   const json = JSON.stringify(results);
-//   console.log(json);
-// })
-
+const knexDB = knex(dbConnectionParams);
+knexDB.schema.hasTable('users').then(function(exists) {
+  console.log('The table users isExist = ', exists);
+  if (!exists) {
+    
+    return knex.schema.createTable('users', function(t) {
+      t.increments('id').primary();
+      t.string('login', 100);
+      t.string('password', 100);
+      t.string('password', 100);
+      t.number('age', 10);
+    });
+  }
+});
 
 // const conString = 'postgres://postgres:dev localhost/node_hero' // Убедитесь, что вы указали данные от вашей базы данных
 // pg.connect(conString, function (err:any, client:any, done:any) {
@@ -56,16 +54,11 @@ import { userRouter } from './resourses/users/controller';
 //     process.exit(0)
 //   })
 // })
-
-
-const app = express();
-const port = 3000;
-
-app.listen(port, () => console.log(`Start listening on port ${port}`));
-
+// const app = express();
+// const port = 3000;
+// app.listen(port, () => console.log(`Start listening on port ${port}`));
 // process.on('uncaughtException', () => console.log('uncaughtException'));
 // process.on('SIGTERM', () => console.log('SIGTERM'));
-
 // app.get('/', function (req, res) {
 //   const taskDescribing = `
 //   <h1>API description:</h1>
@@ -91,9 +84,5 @@ app.listen(port, () => console.log(`Start listening on port ${port}`));
 //   `;
 //   res.send(taskDescribing);
 // })
-
-app.use('/user', userRouter);
-
-
-
-
+// app.use('/user', userRouter);
+//# sourceMappingURL=index.js.map
