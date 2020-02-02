@@ -18,20 +18,22 @@ To **start dev server** use
 ```
 Avaliable requests:
 
-- GET: http://localhost:3000/user/{userID}
-  http://localhost:3000/user/12
+- GET: http://localhost:3000/user/{userId}<br>
+  Example: `http://localhost:3000/user/12`<br>
   Return data of user with transmitted id.
 
-- POST: http://localhost:3000/user/?login={login}&password={password}&age={age}
-  http://localhost:3000/user/?login=igor&password=qwer3&age=5
+- POST: http://localhost:3000/user/?login={login}&password={password}&age={age}<br>
+  Example: `http://localhost:3000/user/?login=igor&password=qwer3&age=5`<br>
   Create new user.
 
-- PUT: http://localhost:3000/user/2?[login={login}&password={password}&age={age}]
+- PUT: http://localhost:3000/user/2?[login={login}&password={password}&age={age}]<br>
+  Example: `http://localhost:3000/user/12?login=vasya`<br>
   Update user with transmitted id.
 
-- DELETE: http://localhost:3000/user/2
+- DELETE: http://localhost:3000/user/{userId}<br>
+  Example: `http://localhost:3000/user/12`<br>
   Delete user with transmitted id.
 
-- GET: localhost:3000/get-suggestions?loginSubstring={loginSubstring}&limit={limit}
-  localhost:3000/get-suggestions?loginSubstring=vas&limit=10
+- GET: localhost:3000/get-suggestions?loginSubstring={loginSubstring}&limit={limit}<br>
+  Example: `localhost:3000/get-suggestions?loginSubstring=vas&limit=10`<br>
   Get auto-suggested users which login contains loginSubstring.
