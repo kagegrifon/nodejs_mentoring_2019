@@ -1,6 +1,6 @@
 # Homework 3
 
-To run project there is need to install PostgreSQL and create database named 'node_hero'.
+**Important!** Before run project there is need to **install PostgreSQL** and create database named **'node_hero'**.
 
 To **fill** database use 
 ```node
