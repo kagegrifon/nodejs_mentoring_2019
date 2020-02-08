@@ -5,9 +5,7 @@ import {
 } from '../interfaces/user';
 
 export class UserService {
-  userModel: UserModelInterface;
-
-  constructor(userModel: UserModelInterface) {
+  constructor(private userModel: UserModelInterface) {
     this.userModel = userModel;
   }
 

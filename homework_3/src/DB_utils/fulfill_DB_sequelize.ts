@@ -1,5 +1,7 @@
 const Sequelize = require('sequelize');
 import { SEQUELIZE_DB_PARAMS } from '../config/DB_connection_config';
+
+import { User } from '../models/userSchema';
 const usersMocks = require('./dataSet/mockUsers.json');
 
 const db = new Sequelize(...SEQUELIZE_DB_PARAMS);
@@ -11,30 +13,6 @@ db
   })
   .catch((err: Error) => {
     console.error('Unable to connect to the database:', err);
-  });
-
-  const User = db.define('users', {
-    id: {
-      primaryKey: true,
-      autoIncrement: true,
-      type: Sequelize.INTEGER,        
-    },
-    isDeleted: {
-      type: Sequelize.BOOLEAN,
-      defaultValue: false,
-    },
-    login: {
-      type: Sequelize.STRING,
-      allowNull: false
-    },
-    password: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    age: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    }
   });
 
   User.sync({ force: true }).then(() => {
