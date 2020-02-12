@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "dev-server": "nodemon --exec ts-node src/index.ts",
-    "fulfill-table-users": "ts-node src/DB_utils/fulfill_DB_sequelize.ts",
+    "fulfill-db": "ts-node src/DB_utils/fulfill_DB_sequelize.ts",
     "test-db-connect": "ts-node src/data-access/dbInit.ts"
   },
   "keywords": [
@@ -29,6 +29,7 @@
     "@types/hapi__joi": "^16.0.5",
     "@types/sequelize": "^4.28.8",
     "express": "^4.17.1",
-    "sequelize": "^5.21.3"
+    "sequelize": "^5.21.3",
+    "sequelize-typescript": "^1.1.0"
   }
 }

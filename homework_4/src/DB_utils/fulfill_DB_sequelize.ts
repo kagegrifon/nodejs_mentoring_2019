@@ -1,12 +1,17 @@
 const Sequelize = require('sequelize');
+import sequelize from 'sequelize';
 import { SEQUELIZE_DB_PARAMS } from '../config/DB_connection_config';
 
-import { User } from '../models/userSchema';
+import { UserDB } from '../models/userDBSchema';
+import { GroupDB } from '../models/groupDBSchema';
+import { userGroupDB } from '../models/userGroupDBSchema';
+import { groupMocks } from './dataSet/mockGroups';
 const usersMocks = require('./dataSet/mockUsers.json');
 
-const db = new Sequelize(...SEQUELIZE_DB_PARAMS);
 
-db
+const dbConnection = new Sequelize(...SEQUELIZE_DB_PARAMS);
+
+dbConnection
   .authenticate()
   .then(() => {
     console.log('Connection has been established successfully.');
@@ -15,8 +20,10 @@ db
     console.error('Unable to connect to the database:', err);
   });
 
-  User.sync({ force: true }).then(() => {
-    User.bulkCreate(usersMocks);
-  });
+  dbConnection.sync({ force: true}).then(async () => {
+    await UserDB.bulkCreate(usersMocks);
+    await GroupDB.bulkCreate(groupMocks);
 
-  
+    UserDB.belongsToMany(GroupDB, { through: userGroupDB });
+    GroupDB.belongsToMany(UserDB, { through: userGroupDB });
+  }); 

@@ -1,20 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
+import { validateData } from '../utils';
+
 import {
   creatingUserSchema,
   updatingUserSchema,
   autoSuggestUserSchema
 } from './userSchema';
 
-export const validateData = (data: any, schema: any) => {
-  const { error, value } = schema.validate(data);
-  if (error) {
-    throw error;
-  }
-  
-  return value;
-}
-
-export const Validators = {
+export const UserValidators = {
   createNewUser: (req: Request, res: Response, next: NextFunction) => {
     if (validateData(req.query, creatingUserSchema)) {
      next();

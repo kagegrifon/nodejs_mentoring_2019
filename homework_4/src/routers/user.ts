@@ -1,5 +1,5 @@
 import express from 'express';
-import { Validators } from '../validators/user';
+import { UserValidators } from '../validators/user';
 import { UserService } from '../services/user';
 
 import { UserModel } from '../models/user';
@@ -23,7 +23,7 @@ userRouter.get('/:userId',
 );
 
 userRouter.post('/',
-  Validators.createNewUser,
+  UserValidators.createNewUser,
   async function (req, res) {
     try {      
       const userDTO = req.query;
@@ -36,7 +36,7 @@ userRouter.post('/',
 );
 
 userRouter.put('/:userId', 
-  Validators.updateUser,
+  UserValidators.updateUser,
   async function (req, res) {
     let reportMessage = 'Request was successful done, user was updated';
 
@@ -71,7 +71,7 @@ userRouter.delete('/:userId',
 );
 
 userRouter.get('/get-suggestions', 
-  Validators.autoSuggestUser,
+  UserValidators.autoSuggestUser,
   async function (req, res) {
     try {
       const { loginSubstring, limit } = req.query;

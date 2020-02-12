@@ -1,5 +1,8 @@
 import express from 'express';
 import { userRouter } from './routers/user';
+import { groupRouter } from './routers/group';
+import { userGroupRouter } from './routers/userGroup';
+
 
 import { taskDescribing } from './taskDescribingLayout';
 
@@ -13,10 +16,10 @@ process.on('SIGTERM', () => console.log('SIGTERM'));
 
 app.get('/', function (req, res) {
   res.send(taskDescribing);
-})
+});
+
+app.use(express.json());
 
 app.use('/user', userRouter);
-
-
-
-
+app.use('/group', groupRouter);
+app.use('/user-group', userGroupRouter); 
