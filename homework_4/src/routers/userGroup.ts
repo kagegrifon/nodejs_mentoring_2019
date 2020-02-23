@@ -2,10 +2,9 @@ import express from 'express';
 import { UserGroupValidators } from '../validators/userGroup';
 import { UserGroupService } from '../services/userGroup';
 
-import { UserGroupModel } from '../models/userGroup';
+import { userGroupDB } from '../models/userGroup';
 
-const groupModel = new UserGroupModel();
-const groupService = new UserGroupService(groupModel);
+const groupService = new UserGroupService(userGroupDB);
 
 export const userGroupRouter = express.Router();
 

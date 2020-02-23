@@ -1,26 +1,25 @@
-import { Op } from 'sequelize';
+import { DataTypes } from 'sequelize';
+import { UserDB } from './user';
+import { GroupDB } from './group';
 
-import { userGroupDB } from './userGroupDBSchema';
-import { UserGroupModelInterface, UsersToGroupParams } from '../interfaces/userGroup';
+import { dbConnection } from '../data-access/dbInit';
 
-export class UserGroupModel implements UserGroupModelInterface {  
-  async addUsersToGroup(data: UsersToGroupParams) {
-    const { groupId, usersId } = data;
-      usersId.forEach(userId => {
-        userGroupDB.create({ groupId, userId: userId });
-      });
-  }
+const TABLE_NAME = 'UserGroup';
 
-  async deleteUsersFromGroup(data: UsersToGroupParams) {
-    const { groupId, usersId } = data;
+const userGroupDB = dbConnection.define(TABLE_NAME, {
+  id: {
+    primaryKey: true,
+    autoIncrement: true,
+    type: DataTypes.INTEGER,      
+    allowNull: false,  
+  },
+});
 
-    await userGroupDB.destroy({
-      where: {
-        groupId: groupId,
-        userId: {
-          [Op.or]: usersId
-        }
-      }
-    });
-  }
-}
+UserDB.belongsToMany(GroupDB, { through: userGroupDB });
+GroupDB.belongsToMany(UserDB, { through: userGroupDB });
+
+userGroupDB.sync()
+  .catch((err: Error)=> console.log(err));
+
+export { userGroupDB };
+ 

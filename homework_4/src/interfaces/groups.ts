@@ -16,7 +16,7 @@ export interface GroupUpdateProps extends GroupCreateProps {}
 
 export interface GroupResponceProps extends GroupCreateProps {}
 
-export interface GroupModelInterface {
+export interface GroupServiceInterface {
   create: (newData: GroupCreateProps) => Promise<string>;
   update:(id: string, updateDate: GroupUpdateProps) => Promise<void>;
   get: (id: string) => Promise<GroupResponceProps | null>;

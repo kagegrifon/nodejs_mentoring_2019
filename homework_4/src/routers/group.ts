@@ -2,10 +2,10 @@ import express from 'express';
 import { groupValidators } from '../validators/group';
 import { GroupService } from '../services/group';
 
-import { GroupModel } from '../models/group';
+import { GroupDB } from '../models/group';
 
-const groupModel = new GroupModel();
-const groupService = new GroupService(groupModel);
+// const groupModel = new GroupModel();
+const groupService = new GroupService(GroupDB);
 
 export const groupRouter = express.Router();
 

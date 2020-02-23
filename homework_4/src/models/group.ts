@@ -1,84 +1,31 @@
-import { GroupDB } from './groupDBSchema';
-import {
-  GroupCreateProps,
-  GroupUpdateProps,
-  GroupModelInterface
-} from '../interfaces/groups';
+import { DataTypes } from 'sequelize';
 
+import { dbConnection } from '../data-access/dbInit';
+import { Permission } from '../interfaces/groups';
 
+const TABLE_NAME = 'groups';
+export const groupDBTableProps = {
+  id: {
+    primaryKey: true,
+    autoIncrement: true,
+    type: DataTypes.INTEGER,        
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  permissions: {
+    type: DataTypes.ARRAY(DataTypes.ENUM(
+      ...Object.keys(Permission)
+    )),
+    allowNull: false,
+  },
+};
 
-export class GroupModel implements GroupModelInterface {
-  async create(newGroupData: GroupCreateProps) {
-    try {
-      const result = await GroupDB.create(newGroupData);
+const GroupDB = dbConnection.define(TABLE_NAME, groupDBTableProps);
 
-      return String(result.id); 
-    } catch(error) {
-      console.log(error);
-      throw error;
-    }
-  }
+GroupDB.sync()
+  .catch((err: Error)=> console.log(err));
 
-  async get(groupId: string) {
-    let group = null;
-
-    try {
-      group = await GroupDB.findByPk(groupId);
-    } catch(error) {
-      console.log(error);
-      throw error;
-    }
-
-    if (!group) {
-      return null;
-    }
-
-    return ({
-        name: group.name,
-        permissions: group.permissions,
-    });
-  }
-
-  async getAll() {
-    let groups = null;
-
-    try {
-      groups = await GroupDB.findAll({
-        attributes: ['name', 'permissions'],
-        raw: true,
-      });
-    } catch(error) {
-      console.log(error);
-      throw error;
-    }
-
-    return groups;
-  }
-
-
-  async update(groupId: string, updateData: GroupUpdateProps) {
-    try {
-      await GroupDB.update(updateData, {
-        where: {
-          id: groupId
-        }
-      });
-    } catch(error) {
-      console.log(error);
-      throw error;
-    }
-  }
-
-  async remove(groupId: string) {
-    try {
-      await GroupDB.destroy({
-        where: {
-          id: groupId,
-        }
-      });
-    } catch(error) {
-      console.log(error);
-      throw error;
-    }
-  }
-}
+export { GroupDB };
+ 

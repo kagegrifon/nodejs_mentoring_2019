@@ -1,4 +1,4 @@
-export interface UserGroupModelInterface {
+export interface UserGroupServiceInterface {
   addUsersToGroup: (data: UsersToGroupParams) => Promise<void>;
   deleteUsersFromGroup: (data: UsersToGroupParams) => Promise<void>;
 }

@@ -2,17 +2,15 @@ import express from 'express';
 import { UserValidators } from '../validators/user';
 import { UserService } from '../services/user';
 
-import { UserModel } from '../models/user';
+import { UserDB } from '../models/user';
 
-const userModel = new UserModel();
-const userService = new UserService(userModel);
-
+const userService = new UserService(UserDB);
 export const userRouter = express.Router();
 
 userRouter.get('/:userId', 
   async function (req, res) {
     const { userId } = req.params;
-    const user = await userService.getUser(userId);
+    const user = await userService.get(userId);
 
     if (user) {
       res.send(user);
@@ -27,7 +25,7 @@ userRouter.post('/',
   async function (req, res) {
     try {      
       const userDTO = req.query;
-      const userID = await userService.createNewUser(userDTO);
+      const userID = await userService.create(userDTO);
       res.send(`Request was successful done, new user was added. New user id = ${userID}`);
     } catch(e) {
       res.status(400).send(e);
@@ -43,8 +41,8 @@ userRouter.put('/:userId',
     try {
       const { userId } = req.params;
 
-      const userDTO = req.query;
-      await userService.updateUser(userId, userDTO);
+      const userDTO = req.body;
+      await userService.update(userId, userDTO);
     } catch(e) {
       reportMessage = `Something went wrong, ${e.message}`;
     }
@@ -60,7 +58,7 @@ userRouter.delete('/:userId',
     try {
       const { userId } = req.params;
 
-      await userService.removeUser(userId);
+      await userService.remove(userId);
     } catch(e) {
       reportMessage = `Something went wrong, ${e.message}`;
       res.status(400);

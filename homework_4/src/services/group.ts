@@ -1,28 +1,84 @@
 import {
   GroupCreateProps,
   GroupUpdateProps,
-  GroupModelInterface
+  GroupServiceInterface
 } from '../interfaces/groups';
 
-export class GroupService {
-  constructor(private groupModel: GroupModelInterface) {
+export class GroupService implements GroupServiceInterface {
+  constructor(private groupModel: any) {
     this.groupModel = groupModel;
   }
 
-  create = async (data: GroupCreateProps) => {
-    return await this.groupModel.create(data);
+  create = async (newGroupData: GroupCreateProps) => {
+    try {
+      const result = await this.groupModel.create(newGroupData);
+
+      return String(result.id); 
+    } catch(error) {
+      console.log(error);
+      throw error;
+    }
   };
 
   update = async (groupId: string, updateData: GroupUpdateProps) => {
-    const currentUserData = await this.groupModel.get(groupId);
-    const updatedUserData = Object.assign({}, currentUserData, updateData);
-    
-    return await this.groupModel.update(groupId, updatedUserData);
+    try {
+      await this.groupModel.update(updateData, {
+        where: {
+          id: groupId
+        }
+      });
+    } catch(error) {
+      console.log(error);
+      throw error;
+    }
   };
 
-  get = async (groupId: string) => await this.groupModel.get(groupId);
+  get = async (groupId: string) => {
+    let group = null;
 
-  getAll = async () => await this.groupModel.getAll();
+    try {
+      group = await this.groupModel.findByPk(groupId);
+    } catch(error) {
+      console.log(error);
+      throw error;
+    }
 
-  remove = async (groupId: string) => await this.groupModel.remove(groupId);
+    if (!group) {
+      return null;
+    }
+
+    return ({
+        name: group.name,
+        permissions: group.permissions,
+    });
+  };
+
+  getAll = async () => {
+    let groups = null;
+
+    try {
+      groups = await this.groupModel.findAll({
+        attributes: ['name', 'permissions'],
+        raw: true,
+      });
+    } catch(error) {
+      console.log(error);
+      throw error;
+    }
+
+    return groups;
+  };
+
+  remove = async (groupId: string) => {
+    try {
+      await this.groupModel.destroy({
+        where: {
+          id: groupId,
+        }
+      });
+    } catch(error) {
+      console.log(error);
+      throw error;
+    }
+  }
 }

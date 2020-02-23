@@ -25,10 +25,10 @@ interface UserInDB extends GetUserResponce {
   isDeleted: boolean;
 }
 
-export interface UserModelInterface {
-  addUser: (newUserData: EditablePropsOfUser) => Promise<string>;
-  updateUser:(userID: string, updatedUser: EditablePropsOfUser) => Promise<void>;
-  getUser: (userID: string) => Promise<GetUserResponce | null>;
-  removeUser: (userID: string) => Promise<void>;
+export interface UserServiceInterface {
+  create: (newUserData: EditablePropsOfUser) => Promise<string>;
+  update:(userID: string, updatedUser: EditablePropsOfUser) => Promise<void>;
+  get: (userID: string) => Promise<GetUserResponce | null>;
+  remove: (userID: string) => Promise<void>;
   getAutoSuggestUsers: (loginSubstring: string, limit: number) => Promise<GetUserResponce[]>;
 }
