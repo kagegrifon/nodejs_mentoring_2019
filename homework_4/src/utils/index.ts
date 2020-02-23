@@ -1,0 +1,2 @@
+
+export { validateData } from './validatorUtils';
