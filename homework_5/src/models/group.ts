@@ -3,6 +3,8 @@ import { DataTypes } from 'sequelize';
 import { dbConnection } from '../data-access/dbInit';
 import { Permission } from '../interfaces/groups';
 
+import { errorLogger } from '../logger';
+
 const TABLE_NAME = 'groups';
 export const groupDBTableProps = {
   id: {
@@ -25,7 +27,7 @@ export const groupDBTableProps = {
 const GroupDB = dbConnection.define(TABLE_NAME, groupDBTableProps);
 
 GroupDB.sync()
-  .catch((err: Error)=> console.log(err));
+  .catch((err: Error) => { errorLogger.log('error', 'Error on sync GroupDB', err); });
 
 export { GroupDB };
  

@@ -5,75 +5,108 @@ import {
   UserServiceInterface,
 } from '../interfaces/user';
 
+import { errorLogger, getCommonLogger } from '../logger';
+
+const logError = getCommonLogger({
+  logger: errorLogger,
+  level: 'warn', 
+  layer: 'UserService',
+});
+
 export class UserService implements UserServiceInterface {
   constructor(private userModel: any) {
     this.userModel = userModel;
   }
 
   create = async (newUserData: EditablePropsOfUser) => {
-    const { id } = await this.userModel.create(newUserData);
-
-    return String(id);
+    try {
+      const { id } = await this.userModel.create(newUserData);
+      return String(id);
+    } catch(error) {
+      logError('Error on create user', { error, params: { newUserData } });
+      throw error;
+    }
   };
 
   update = async (userId: string, updatingUserData: UpdatingPropsOfUser) => {
-    await this.userModel.update(updatingUserData, {
-      where: {
-        isDeleted: false,
-        id: userId
-      }
-    });
+    try {
+      await this.userModel.update(updatingUserData, {
+        where: {
+          isDeleted: false,
+          id: userId
+        }
+      });
+    } catch(error) {
+      logError('Error on update user', { error, params: { userId, updatingUserData } });
+      throw error;
+    }
   };
 
   get = async (userId: string) => {
-    const user = await this.userModel.findOne({
-      where: {
-        id: userId,
-        isDeleted: false,
-      },
-      raw: true,
-    });
-  
-    let result = null;
+    try {
+      const user = await this.userModel.findOne({
+        where: {
+          id: userId,
+          isDeleted: false,
+        },
+        raw: true,
+      });
+    
+      let result = null;
 
-    if (user) {
-      result = {
-        id: user.id,
-        login: user.login,
-        password: user.password,
-        age: user.age,
-      };
+      if (user) {
+        result = {
+          id: user.id,
+          login: user.login,
+          password: user.password,
+          age: user.age,
+        };
+      }
+      return result;
+    } catch(error) {
+      logError('Error on get user', { error, params: { userId } });
+      throw error;
     }
-    return result;
   }
 
   remove = async (userId: string) => {
-    await this.userModel.update({ isDeleted: true }, {
-      where: {
-        id: userId,
-        isDeleted: false,
-      }
-    });
+    try {
+      await this.userModel.update({ isDeleted: true }, {
+        where: {
+          id: userId,
+          isDeleted: false,
+        }
+      });
+    } catch(error) {
+      logError('Error on remove user', { error, params: { userId } });
+      throw error;
+    }
   }
 
   getAutoSuggestUsers = async (loginSubstring: string, limit: number) => {
-    const dbFoundUsers = await this.userModel.findAll({ limit, order: [['login', 'DESC']] }, {
-      where: {
-        isDeleted: false,
-        login: {
-          [Op.like]: loginSubstring,
+    try {
+      const dbFoundUsers = await this.userModel.findAll({ limit, order: [['login', 'DESC']] }, {
+        where: {
+          isDeleted: false,
+          login: {
+            [Op.like]: loginSubstring,
+          }
         }
-      }
-    });
-    const result = dbFoundUsers.map((dbUser: any) => {
-      return {
-        id: dbUser.id,
-        login: dbUser.login,
-        password: dbUser.password,
-        age: dbUser.age,
-      }
-    });
-    
-    return result;
+      });
+  
+      const result = dbFoundUsers.map((dbUser: any) => {
+        return {
+          id: dbUser.id,
+          login: dbUser.login,
+          password: dbUser.password,
+          age: dbUser.age,
+        }
+      });
+      
+      return result;
+    } catch(error) {
+      logError('Error on get auto suggest users', { error, params: { loginSubstring, limit } });
+      throw error;
+    }
   }
 }

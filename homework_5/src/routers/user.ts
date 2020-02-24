@@ -1,4 +1,6 @@
 import express from 'express';
+
+import { infoLogger, errorLogger, getRouterErrorLogger } from '../logger';
 import { UserValidators } from '../validators/user';
 import { UserService } from '../services/user';
 
@@ -6,6 +8,12 @@ import { UserDB } from '../models/user';
 
 const userService = new UserService(UserDB);
 export const userRouter = express.Router();
+
+const logError = getRouterErrorLogger({
+  logger: errorLogger,
+  level: 'warn',
+  layer: 'UserRouter',
+});
 
 userRouter.get('/:userId', 
   async function (req, res) {
@@ -15,6 +23,7 @@ userRouter.get('/:userId',
     if (user) {
       res.send(user);
     } else {
+      infoLogger.log('info', `There is no user with such id: ${userId}`);
       res.status(404).send(`There is no user with such id: ${userId}`);
     }
   }
@@ -28,6 +37,7 @@ userRouter.post('/',
       const userID = await userService.create(userDTO);
       res.send(`Request was successful done, new user was added. New user id = ${userID}`);
     } catch(e) {
+      logError('Error on create user', req, res, e);
       res.status(400).send(e);
     }  
   }
@@ -44,6 +54,7 @@ userRouter.put('/:userId',
       const userDTO = req.body;
       await userService.update(userId, userDTO);
     } catch(e) {
+      logError('Error on update user', req, res, e);
       reportMessage = `Something went wrong, ${e.message}`;
     }
 
@@ -60,6 +71,7 @@ userRouter.delete('/:userId',
 
       await userService.remove(userId);
     } catch(e) {
+      logError('Error on delete user', req, res, e);
       reportMessage = `Something went wrong, ${e.message}`;
       res.status(400);
     }
@@ -77,6 +89,7 @@ userRouter.get('/get-suggestions',
       const suggestions = await userService.getAutoSuggestUsers(loginSubstring, Number(limit));
       res.send(suggestions);
     } catch(e) {
+      logError('Error on get user suggestions', req, res, e);
       res.status(500).send(e);
     }
   }

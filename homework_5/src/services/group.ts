@@ -4,6 +4,14 @@ import {
   GroupServiceInterface
 } from '../interfaces/groups';
 
+import { errorLogger, getCommonLogger } from '../logger';
+
+const logError = getCommonLogger({
+  logger: errorLogger,
+  level: 'warn', 
+  layer: 'GroupService',
+});
+
 export class GroupService implements GroupServiceInterface {
   constructor(private groupModel: any) {
     this.groupModel = groupModel;
@@ -15,7 +23,7 @@ export class GroupService implements GroupServiceInterface {
 
       return String(result.id); 
     } catch(error) {
-      console.log(error);
+      logError('Error on create group', { error, params: { newGroupData } });
       throw error;
     }
   };
@@ -28,7 +36,7 @@ export class GroupService implements GroupServiceInterface {
         }
       });
     } catch(error) {
-      console.log(error);
+      logError('Error on update group', { error, params: { groupId, updateData } });
       throw error;
     }
   };
@@ -39,7 +47,7 @@ export class GroupService implements GroupServiceInterface {
     try {
       group = await this.groupModel.findByPk(groupId);
     } catch(error) {
-      console.log(error);
+      logError('Error on get group', { error, params: { groupId } });
       throw error;
     }
 
@@ -62,7 +70,7 @@ export class GroupService implements GroupServiceInterface {
         raw: true,
       });
     } catch(error) {
-      console.log(error);
+      logError('Error on get all groups', { error });
       throw error;
     }
 
@@ -77,7 +85,7 @@ export class GroupService implements GroupServiceInterface {
         }
       });
     } catch(error) {
-      console.log(error);
+      logError('Error on remove group', { error, params: { groupId } });
       throw error;
     }
   }

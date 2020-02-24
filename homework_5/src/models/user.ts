@@ -1,6 +1,8 @@
 import { dbConnection } from '../data-access/dbInit';
 import { DataTypes } from 'sequelize';
 
+import { errorLogger } from '../logger';
+
 const UserDB = dbConnection.define('users', {
   id: {
     primaryKey: true,
@@ -26,6 +28,6 @@ const UserDB = dbConnection.define('users', {
 });
 
 UserDB.sync()
-  .catch((err: Error)=> console.log(err));
+  .catch((err: Error) => { errorLogger.log('error', 'Error on sync UserDB', err); });
 
 export { UserDB };
