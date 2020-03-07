@@ -1,0 +1,4 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.taskDescribing = "\n  <h1>API description:</h1>\n    <ul>\n      <li>\n        get user by id: <b>GET</b> on url: {HOST}/user/:userId;\n      </li>\n      <li>add user: <b>POST</b> on url: {HOST}/user/{queries: login, password, age},<br>\n        queries description see in creatingUserSchema;\n      </li>\n      <li>\n        update user: <b>PUT</b> on url: {HOST}/user/:userId{queries: login, password, age},<br>\n        queries description see in updatingUserSchema;\n      </li>\n      <li>\n        delete user: <b>DELETE</b> on url: {HOST}/user/:userId;\n      </li>\n      <li>\n        get suggestion by name and limit: <b>GET</b> on url: {HOST}/user/get-suggestions{queries: loginSubstring, limit},<br>\n        queries description see in autoSuggestUserSchema;\n      </li>\n    </ul>\n  ";
+//# sourceMappingURL=taskDescribingLayout.js.map
