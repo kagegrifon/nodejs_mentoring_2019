@@ -3,6 +3,7 @@ import express from 'express';
 import { infoLogger, errorLogger, getRouterErrorLogger } from '../logger';
 import { UserValidators } from '../validators/user';
 import { UserService } from '../services/user';
+import { checkToken } from '../middleware/checkToken'
 
 import { UserDB } from '../models/user';
 
@@ -14,6 +15,8 @@ const logError = getRouterErrorLogger({
   level: 'warn',
   layer: 'UserRouter',
 });
+
+userRouter.use(checkToken);
 
 userRouter.get('/:userId', 
   async function (req, res) {

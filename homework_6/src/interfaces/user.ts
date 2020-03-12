@@ -30,5 +30,6 @@ export interface UserServiceInterface {
   update:(userID: string, updatedUser: EditablePropsOfUser) => Promise<void>;
   get: (userID: string) => Promise<GetUserResponce | null>;
   remove: (userID: string) => Promise<void>;
+  getByName: (login: string) => Promise<GetUserResponce | null>;
   getAutoSuggestUsers: (loginSubstring: string, limit: number) => Promise<GetUserResponce[]>;
 }

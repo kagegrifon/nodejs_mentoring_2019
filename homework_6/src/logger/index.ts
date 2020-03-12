@@ -32,6 +32,9 @@ winstonContainer.add('exceptionLogger', {
 winstonContainer.add('infoLogger', {
   level: 'info',
   format: combine(
+    format.timestamp({
+      format: 'YYYY-MM-DD HH:mm:ss'
+    }),
     format.splat(),
     format.json()
   ),
@@ -55,7 +58,7 @@ winstonContainer.add('errorLogger', {
        level: 'warn',
        format: consoleFormat,
     }),
-    infoFileTransport,
+    errorsFileTransport,
   ]
 });
 
@@ -66,8 +69,8 @@ export const errorLogger = winstonContainer.get('errorLogger');
 export const serverInfoLoggerHandler  = (req:any, res:any, next:any) => {
   infoLogger.info({
     message: 'Server hangle',
-    req,
-    res,
+    // req,
+    // res,
   });
 
   next();

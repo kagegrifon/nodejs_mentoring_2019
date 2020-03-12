@@ -83,6 +83,33 @@ export class UserService implements UserServiceInterface {
     }
   }
 
+  getByName = async (login: string) => {
+    try {
+      const user = await this.userModel.findOne({
+        where: {
+          login,
+          isDeleted: false,
+        },
+        raw: true,
+      });
+    
+      let result = null;
+
+      if (user) {
+        result = {
+          id: user.id,
+          login: user.login,
+          password: user.password,
+          age: user.age,
+        };
+      }
+      return result;
+    } catch(error) {
+      logError('Error on get user by name', { error, params: { login } });
+      throw error;
+    }
+  }
+
   getAutoSuggestUsers = async (loginSubstring: string, limit: number) => {
     try {
       const dbFoundUsers = await this.userModel.findAll({ limit, order: [['login', 'DESC']] }, {

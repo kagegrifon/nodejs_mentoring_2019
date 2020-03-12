@@ -6,7 +6,7 @@ import { errorLogger } from '../logger';
 
 import { dbConnection } from '../data-access/dbInit';
 
-const TABLE_NAME = 'UserGroup';
+const TABLE_NAME = 'userGroup';
 
 const userGroupDB = dbConnection.define(TABLE_NAME, {
   id: {
