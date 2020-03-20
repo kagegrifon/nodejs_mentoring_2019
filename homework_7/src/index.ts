@@ -7,8 +7,9 @@ import { authRouter } from './routers/authorization';
 import { checkToken } from './middleware/checkToken';
 import { infoLogger, errorLogger, exceptionLogger, serverInfoLoggerHandler } from './logger';
 
+const config = require('config');
 const app = express();
-const port = 3000;
+const port = config.get('app.port');
 
 const cors = require('cors');
 

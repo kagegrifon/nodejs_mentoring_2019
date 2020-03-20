@@ -1,8 +1,10 @@
 import { infoLogger, errorLogger } from '../logger';
-const Sequelize = require('sequelize');
-import { SEQUELIZE_DB_PARAMS } from '../config/DB_connection_config';
 
-export const dbConnection = new Sequelize(...SEQUELIZE_DB_PARAMS);
+const Sequelize = require('sequelize');
+const config = require('config');
+
+const connectionConfig = config.get('dbConntection');
+export const dbConnection = new Sequelize(...connectionConfig);
 
 dbConnection
   .authenticate()

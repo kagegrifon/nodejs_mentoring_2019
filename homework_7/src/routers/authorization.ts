@@ -1,7 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 
-import { SECRET } from '../config/secret';
+import { SECRET } from '../../config/secret';
 
 import { errorLogger, getRouterErrorLogger } from '../logger';
 import { authValidators } from '../validators/authorization';

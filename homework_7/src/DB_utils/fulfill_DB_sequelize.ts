@@ -1,7 +1,5 @@
 
-// require Sequelize = from 'sequelize';
 const Sequelize = require("sequelize");
-import { SEQUELIZE_DB_PARAMS } from '../config/DB_connection_config';
 
 import { infoLogger, errorLogger } from '../logger';
 
@@ -15,7 +13,10 @@ import { groupMocks } from './dataSet/mockGroups';
 const usersMocks = require('./dataSet/mockUsers.json');
 const authMocks = require('./dataSet/mockAuth.json');
 
-const dbConnection = new Sequelize(...SEQUELIZE_DB_PARAMS);
+const config = require('config');
+const connectionConfig = config.get('dbConntection');
+
+const dbConnection = new Sequelize(...connectionConfig);
 
 dbConnection
   .authenticate()

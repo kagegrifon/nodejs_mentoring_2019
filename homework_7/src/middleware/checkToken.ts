@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { SECRET } from '../config/secret';
+import { SECRET } from '../../config/secret';
 
 export const checkToken = function(req: any, res: any, next: any) {
   const token = req.headers['my-hidden-access-token'];
