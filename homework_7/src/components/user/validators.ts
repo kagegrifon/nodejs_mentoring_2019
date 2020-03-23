@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
-import { validateData } from '../utils';
+import { validateData } from '../../utils';
 
 import {
   creatingUserSchema,
   updatingUserSchema,
   autoSuggestUserSchema
-} from './userSchema';
+} from './validateSchema';
 
 export const UserValidators = {
   createNewUser: (req: Request, res: Response, next: NextFunction) => {

@@ -3,9 +3,9 @@ import {
   EditablePropsOfUser,
   UpdatingPropsOfUser,
   UserServiceInterface,
-} from '../interfaces/user';
+} from './interfaces';
 
-import { errorLogger, getCommonLogger } from '../logger';
+import { errorLogger, getCommonLogger } from '../../logger';
 
 const logError = getCommonLogger({
   logger: errorLogger,

@@ -1,5 +1,5 @@
 import Joi from '@hapi/joi';
-import { Permission } from '../interfaces/groups';
+import { Permission } from './interfaces';
 
 export const createGroupSchema = Joi.object({
   name: Joi.string()

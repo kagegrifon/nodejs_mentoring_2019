@@ -1,10 +1,10 @@
 import express from 'express';
 
-import { errorLogger, getRouterErrorLogger } from '../logger';
-import { UserGroupValidators } from '../validators/userGroup';
-import { UserGroupService } from '../services/userGroup';
+import { errorLogger, getRouterErrorLogger } from '../../logger';
+import { UserGroupValidators } from './validators';
+import { UserGroupService } from './service';
 
-import { userGroupDB } from '../models/userGroup';
+import { userGroupDB } from './model';
 
 const groupService = new UserGroupService(userGroupDB);
 export const userGroupRouter = express.Router();

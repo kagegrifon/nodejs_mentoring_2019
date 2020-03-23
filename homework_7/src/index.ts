@@ -1,9 +1,9 @@
 import express from 'express';
 
-import { userRouter } from './routers/user';
-import { groupRouter } from './routers/group';
-import { userGroupRouter } from './routers/userGroup';
-import { authRouter } from './routers/authorization';
+import { userRouter } from './components/user/router';
+import { groupRouter } from './components/group/router';
+import { userGroupRouter } from './components/user_group/router';
+import { authRouter } from './components/authorization/router';
 import { checkToken } from './middleware/checkToken';
 import { infoLogger, errorLogger, exceptionLogger, serverInfoLoggerHandler } from './logger';
 

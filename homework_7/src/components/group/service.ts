@@ -2,9 +2,9 @@ import {
   GroupCreateProps,
   GroupUpdateProps,
   GroupServiceInterface
-} from '../interfaces/groups';
+} from './interfaces';
 
-import { errorLogger, getCommonLogger } from '../logger';
+import { errorLogger, getCommonLogger } from '../../logger';
 
 const logError = getCommonLogger({
   logger: errorLogger,

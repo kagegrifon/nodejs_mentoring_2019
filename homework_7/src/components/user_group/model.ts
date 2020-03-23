@@ -1,10 +1,10 @@
 import { DataTypes } from 'sequelize';
-import { UserDB } from './user';
-import { GroupDB } from './group';
+import { UserDB } from '../user/model';
+import { GroupDB } from '../group/model';
 
-import { errorLogger } from '../logger';
+import { errorLogger } from '../../logger';
 
-import { dbConnection } from '../data-access/dbInit';
+import { dbConnection } from '../../data-access/dbInit';
 
 const TABLE_NAME = 'userGroup';
 

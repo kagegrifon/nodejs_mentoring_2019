@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-import { validateData } from '../utils';
+import { validateData } from '../../utils';
 
 import {
   createGroupSchema,
   updateGroupSchema,
-} from './groupSchema';
+} from './validateSchema';
 
 export const groupValidators = {
   create: (req: Request, res: Response, next: NextFunction) => {

@@ -1,11 +1,11 @@
 import express from 'express';
 
-import { infoLogger, errorLogger, getRouterErrorLogger } from '../logger';
-import { UserValidators } from '../validators/user';
-import { UserService } from '../services/user';
-import { checkToken } from '../middleware/checkToken'
+import { infoLogger, errorLogger, getRouterErrorLogger } from '../../logger';
+import { UserValidators } from './validators';
+import { UserService } from './service';
+import { checkToken } from '../../middleware/checkToken'
 
-import { UserDB } from '../models/user';
+import { UserDB } from './model';
 
 const userService = new UserService(UserDB);
 export const userRouter = express.Router();

@@ -1,4 +1,4 @@
-import { Permission } from '../../interfaces/groups';
+import { Permission } from '../../components/group/interfaces';
 
 export const groupMocks = [
   {

@@ -3,10 +3,10 @@ const Sequelize = require("sequelize");
 
 import { infoLogger, errorLogger } from '../logger';
 
-import { UserDB } from '../models/user';
-import { GroupDB } from '../models/group';
-import { authDB } from '../models/authorization';
-import { userGroupDB } from '../models/userGroup';
+import { UserDB } from '../components/user/model';
+import { GroupDB } from '../components/group/model';
+import { authDB } from '../components/authorization/model';
+import { userGroupDB } from '../components/user_group/model';
 
 import { groupMocks } from './dataSet/mockGroups';
 

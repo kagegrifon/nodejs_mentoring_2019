@@ -2,9 +2,9 @@ import { Op } from 'sequelize';
 import {
   UserGroupServiceInterface,
   UsersToGroupParams
-} from '../interfaces/userGroup';
+} from './interfaces';
 
-import { errorLogger, getCommonLogger } from '../logger';
+import { errorLogger, getCommonLogger } from '../../logger';
 
 const logError = getCommonLogger({
   logger: errorLogger,

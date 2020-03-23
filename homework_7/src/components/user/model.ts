@@ -1,7 +1,7 @@
-import { dbConnection } from '../data-access/dbInit';
+import { dbConnection } from '../../data-access/dbInit';
 import { DataTypes } from 'sequelize';
 
-import { errorLogger } from '../logger';
+import { errorLogger } from '../../logger';
 
 const UserDB = dbConnection.define('users', {
   id: {

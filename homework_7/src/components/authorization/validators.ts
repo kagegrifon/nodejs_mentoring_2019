@@ -1,6 +1,6 @@
 import Joi from '@hapi/joi';
 import { Request, Response, NextFunction } from 'express';
-import { validateData } from '../utils';
+import { validateData } from '../../utils';
 
 export const authSchema = Joi.object({
   username: Joi.string()

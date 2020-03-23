@@ -1,9 +1,9 @@
 import { DataTypes } from 'sequelize';
 
-import { dbConnection } from '../data-access/dbInit';
-import { Permission } from '../interfaces/groups';
+import { dbConnection } from '../../data-access/dbInit';
+import { Permission } from './interfaces';
 
-import { errorLogger } from '../logger';
+import { errorLogger } from '../../logger';
 
 const TABLE_NAME = 'groups';
 export const groupDBTableProps = {

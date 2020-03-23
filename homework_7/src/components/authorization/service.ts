@@ -1,9 +1,9 @@
 import {  
   AuthServiceInterface,
   LoginParams
-} from '../interfaces/authorization';
+} from './interfaces';
 
-import { errorLogger, getCommonLogger } from '../logger';
+import { errorLogger, getCommonLogger } from '../../logger';
 
 const logError = getCommonLogger({
   logger: errorLogger,

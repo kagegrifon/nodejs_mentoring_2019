@@ -1,8 +1,8 @@
 import { DataTypes } from 'sequelize';
 
-import { errorLogger } from '../logger';
+import { errorLogger } from '../../logger';
 
-import { dbConnection } from '../data-access/dbInit';
+import { dbConnection } from '../../data-access/dbInit';
 
 const TABLE_NAME = 'auth';
 

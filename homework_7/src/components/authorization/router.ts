@@ -1,17 +1,17 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 
-import { SECRET } from '../../config/secret';
+import { SECRET } from '../../../config/secret';
 
-import { errorLogger, getRouterErrorLogger } from '../logger';
-import { authValidators } from '../validators/authorization';
+import { errorLogger, getRouterErrorLogger } from '../../logger';
+import { authValidators } from './validators';
 
-import { AuthService } from '../services/authorization';
-import { UserService } from '../services/user';
+import { AuthService } from './service';
+import { UserService } from '../user/service';
 
 
-import { authDB } from '../models/authorization';
-import { UserDB } from '../models/user';
+import { authDB } from './model';
+import { UserDB } from '../user/model';
 
 const authService = new AuthService(authDB);
 const userService = new UserService(UserDB);
