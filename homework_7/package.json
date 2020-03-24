@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npx jest",
     "build": "tsc",
     "dev-server": "nodemon --exec ts-node src/index.ts",
     "fulfill-db": "ts-node src/DB_utils/fulfill_DB_sequelize.ts",
@@ -18,10 +18,12 @@
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^4.17.2",
+    "@types/jest": "^25.1.4",
     "@types/node": "^12.12.21",
     "eslint": "^6.8.0",
     "jest": "^25.1.0",
     "nodemon": "^2.0.2",
+    "ts-jest": "^25.2.1",
     "ts-node": "^8.5.4",
     "typescript": "^3.7.4"
   },
