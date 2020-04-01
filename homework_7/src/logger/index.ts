@@ -20,13 +20,7 @@ winstonContainer.add('exceptionLogger', {
     label({ label: 'Exception log' }),
     json()
   ),
-  transports: [
-    new winston.transports.Console({ 
-      level: 'error',
-      format: consoleFormat
-    }),
-    errorsFileTransport,
-  ]
+  transports: [errorsFileTransport]
 });
 
 winstonContainer.add('infoLogger', {
@@ -38,13 +32,7 @@ winstonContainer.add('infoLogger', {
     format.splat(),
     format.json()
   ),
-  transports: [
-    infoFileTransport,
-    new winston.transports.Console({
-      level: 'info',
-      format: consoleFormat
-    })
-  ]
+  transports: [infoFileTransport]
 });
 
 winstonContainer.add('errorLogger', {
@@ -53,18 +41,32 @@ winstonContainer.add('errorLogger', {
     format.splat(),
     format.json()
   ),
-  transports: [
-    new winston.transports.Console({
-       level: 'warn',
-       format: consoleFormat,
-    }),
-    errorsFileTransport,
-  ]
+  transports: [errorsFileTransport]
 });
 
-export const infoLogger = winstonContainer.get('infoLogger');
-export const exceptionLogger = winstonContainer.get('exceptionLogger');
-export const errorLogger = winstonContainer.get('errorLogger');
+const infoLogger = winstonContainer.get('infoLogger');
+const exceptionLogger = winstonContainer.get('exceptionLogger');
+const errorLogger = winstonContainer.get('errorLogger');
+
+if (process.env.NODE_ENV !== 'test') {
+  infoLogger.add(
+    new winston.transports.Console({
+      level: 'info',
+      format: consoleFormat
+  }));
+  exceptionLogger.add(
+    new winston.transports.Console({
+      level: 'error',
+      format: consoleFormat
+  }));
+  errorLogger.add(
+    new winston.transports.Console({
+      level: 'warn',
+      format: consoleFormat
+  }));
+}
+
+export { infoLogger, exceptionLogger, errorLogger };
 
 export const serverInfoLoggerHandler  = (req:any, res:any, next:any) => {
   infoLogger.info({

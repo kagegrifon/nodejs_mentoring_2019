@@ -9,7 +9,7 @@ import { checkToken } from './middleware/checkToken';
 import { infoLogger, errorLogger, exceptionLogger, serverInfoLoggerHandler } from './logger';
 
 const config = require('config');
-const app = express();
+export const app = express();
 const port = config.get('app.port');
 
 const cors = require('cors');
@@ -18,15 +18,11 @@ export const server = app.listen(port, () => infoLogger.log('info', `Start liste
 
 app.use(cors())
 app.use(express.json());
-// app.use(serverInfoLoggerHandler);
-// app.use(EndpointRoutes.user, checkToken, userRouter);
-app.use(EndpointRoutes.user, userRouter);
-// app.use(EndpointRoutes.group, checkToken, groupRouter);
-app.use(EndpointRoutes.group, groupRouter);
+app.use(serverInfoLoggerHandler);
+app.use(EndpointRoutes.user, checkToken, userRouter);
+app.use(EndpointRoutes.group, checkToken, groupRouter);
 app.use(EndpointRoutes.userGroup, checkToken, userGroupRouter); 
 app.use(EndpointRoutes.login, authRouter);
 
 process.on('uncaughtException', (error) => { exceptionLogger.log('error', 'Get uncaughtException error', error); });
 process.on('SIGTERM', () => { errorLogger.log('warn', 'Ocurred SIGTERM'); });
-
-export { app };

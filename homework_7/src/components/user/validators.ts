@@ -9,14 +9,14 @@ import {
 
 export const UserValidators = {
   createNewUser: (req: Request, res: Response, next: NextFunction) => {
-    if (validateData(req.query, creatingUserSchema)) {
+    if (validateData(req.body, creatingUserSchema)) {
      next();
     } else {
       res.status(400).send();
     }
   },
   updateUser: (req: Request, res: Response, next: NextFunction) => {
-    if (validateData(req.query, updatingUserSchema)) {
+    if (validateData(req.body, updatingUserSchema)) {
      next();
     } else {
       res.status(400).send();

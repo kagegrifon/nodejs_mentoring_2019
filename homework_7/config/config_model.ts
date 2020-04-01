@@ -10,5 +10,12 @@ export interface Config {
   ],
   app: {
     port: number;
-  }
+  },
+  env: EnvType;
+}
+
+export enum EnvType {
+  TEST = 'TEST',
+  DEV = 'DEV',
+  PROD = 'PROD',
 }

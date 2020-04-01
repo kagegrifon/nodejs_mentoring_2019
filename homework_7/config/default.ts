@@ -1,4 +1,4 @@
-import { Config } from './config_model';
+import { Config, EnvType } from './config_model';
 
 const config: Config = {
   dbConntection: [
@@ -12,7 +12,8 @@ const config: Config = {
   ],
   app: {
     port: 3000,
-  }
+  },
+  env: EnvType.DEV,
 };
 
 export default config;

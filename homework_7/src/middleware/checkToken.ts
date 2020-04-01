@@ -9,7 +9,6 @@ export const checkToken = function(req: any, res: any, next: any) {
       if (err) {
         res.json({ success: false, message: 'Failed to authenticate token' });
       } else {
-        console.log('decoded', decoded);
         next();
       }
     })

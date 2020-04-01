@@ -1,7 +1,12 @@
 import { app, server } from '../../index';
 import { EndpointRoutes } from '../../constants';
+import { infoLogger, errorLogger, exceptionLogger } from '../../logger';
+
 import { GroupService } from './service';
 import { GroupCreateProps, GroupUpdateProps, Permission, GroupServiceInterface } from './interfaces';
+
+import { getToken } from '../../utils';
+import { SECRET } from '../../../config/secret';
 
 const request = require("supertest");
 
@@ -42,16 +47,50 @@ jest.mock('./service', () => ({
   }
 }));
 
-afterAll((done) => { server.close(done); });
+const token = getToken({ userId: '3' }, SECRET);
+
+// afterAll((done) => {
+//   Promise.all([
+//     // new Promise(resolve => { server.close(resolve); }),
+//     // new Promise(resolve => { infoLogger.end(resolve); }),
+//     // new Promise(resolve => { errorLogger.end(resolve); }),
+//     // new Promise(resolve => { exceptionLogger.end(resolve); }),
+//   ]).then(done);
+  
+//   // server.close(done);
+
+//   // infoLogger.end();
+//   // errorLogger.end();
+//   // exceptionLogger.end(); 
+// });
+
+// beforeAll((done) => {
+//   const port = require('config').get('app.port');
+//   const startListening = function() {
+//     app.listen(port, done);
+//   };
+
+//   server.close(startListening);
+// });
 
 describe(`Test GET ${EndpointRoutes.group}`, () => {
   beforeEach(() => {
     serviceGetAll.mockClear();
   });
 
+  const route = EndpointRoutes.group;
+
+  test('403 status in response, when no token', async () => {
+    const res = await request(app)
+      .get(route);
+    
+      expect(res.statusCode).toBe(403);
+  });
+
   test('Call groupService.getAll one time', async () => {
     await request(app)
-      .get(EndpointRoutes.group);
+      .get(route)
+      .set('my-hidden-access-token', token);
     
     expect(serviceGetAll.mock.calls.length).toBe(1);
   });
@@ -60,7 +99,8 @@ describe(`Test GET ${EndpointRoutes.group}`, () => {
     serviceGetAll.mockResolvedValueOnce([mockGroup]);
 
     const res = await request(app)
-      .get(EndpointRoutes.group);
+      .get(route)
+      .set('my-hidden-access-token', token);
     
     expect(res.body).toEqual(expect.arrayContaining([mockGroup]));
   });
@@ -69,7 +109,8 @@ describe(`Test GET ${EndpointRoutes.group}`, () => {
     serviceGetAll.mockRejectedValueOnce(new Error('Some happens'));
 
     const res = await request(app)
-      .get(EndpointRoutes.group);
+      .get(route)
+      .set('my-hidden-access-token', token);
     
     expect(res.statusCode).toBe(500);
   });
@@ -81,17 +122,27 @@ describe(`Test GET ${EndpointRoutes.group}/:groupId`, () => {
   });
 
   const groupId = '3';
+  const route = `${EndpointRoutes.group}/${groupId}`;
+
+  test('403 status in response, when no token', async () => {
+    const res = await request(app)
+      .get(route);
+    
+      expect(res.statusCode).toBe(403);
+  });
 
   test('Call groupService.get one time', async () => {
     await request(app)
-      .get(`${EndpointRoutes.group}/${groupId}`);
+      .get(route)
+      .set('my-hidden-access-token', token);
     
     expect(serviceGet.mock.calls.length).toBe(1);
   });
 
-  test('Call groupService.get with passed gpoupId', async () => {
+  test('Call groupService.get with passed groupId', async () => {
     await request(app)
-      .get(`${EndpointRoutes.group}/${groupId}`);
+      .get(route)
+      .set('my-hidden-access-token', token);
     
     expect(serviceGet.mock.calls[0][0]).toBe(groupId);
   });
@@ -100,7 +151,8 @@ describe(`Test GET ${EndpointRoutes.group}/:groupId`, () => {
     serviceGet.mockResolvedValueOnce(mockGroup);
 
     const res = await request(app)
-      .get(`${EndpointRoutes.group}/${groupId}`);
+      .get(route)
+      .set('my-hidden-access-token', token);
     
     expect(res.body).toEqual(mockGroup);
   });
@@ -109,7 +161,8 @@ describe(`Test GET ${EndpointRoutes.group}/:groupId`, () => {
     serviceGet.mockResolvedValueOnce(null);
 
     const res = await request(app)
-      .get(`${EndpointRoutes.group}/${groupId}`);
+      .get(route)
+      .set('my-hidden-access-token', token);
     
     expect(res.statusCode).toBe(404);
   });
@@ -118,7 +171,8 @@ describe(`Test GET ${EndpointRoutes.group}/:groupId`, () => {
     serviceGet.mockRejectedValueOnce(new Error('Some happens'));
 
     const res = await request(app)
-      .get(`${EndpointRoutes.group}/${groupId}`);
+      .get(route)
+      .set('my-hidden-access-token', token);
     
     expect(res.statusCode).toBe(500);
   });
@@ -132,9 +186,17 @@ describe(`Test POST ${EndpointRoutes.group}`, () => {
 
   const route = EndpointRoutes.group;
 
+  test('403 status in response, when no token', async () => {
+    const res = await request(app)
+      .get(route);
+    
+      expect(res.statusCode).toBe(403);
+  });
+
   test("500 status in response, when invalid data was send", async () => {
     const res = await request(app)
       .post(route)
+      .set('my-hidden-access-token', token)
       .send({ invalidData: 'test' });
 
     expect(res.statusCode).toBe(500);
@@ -142,7 +204,9 @@ describe(`Test POST ${EndpointRoutes.group}`, () => {
 
   test("GroupService.create wasn't called, when invalid data was send", async () => {
     await request(app)
-      .post(route);
+      .post(route)
+      .set('my-hidden-access-token', token)
+      .send({ invalidData: 'test' });
     
     expect(serviceCreate.mock.calls.length).toBe(0);
   });
@@ -150,6 +214,7 @@ describe(`Test POST ${EndpointRoutes.group}`, () => {
   test('Call groupService.create one time', async () => {
     await request(app)
       .post(route)
+      .set('my-hidden-access-token', token)
       .send(mockGroup);
     
     expect(serviceCreate.mock.calls.length).toBe(1);
@@ -158,6 +223,7 @@ describe(`Test POST ${EndpointRoutes.group}`, () => {
   test('Call groupService.create with passed groupDTO in body', async () => {
     await request(app)
       .post(route)
+      .set('my-hidden-access-token', token)
       .send(mockGroup);
     
     expect(serviceCreate.mock.calls[0][0]).toEqual(mockGroup);
@@ -166,6 +232,7 @@ describe(`Test POST ${EndpointRoutes.group}`, () => {
   test("200 status in response, when valid data was send", async () => {
     const res = await request(app)
       .post(route)
+      .set('my-hidden-access-token', token)
       .send(mockGroup);
     
       expect(res.statusCode).toBe(200);
@@ -176,6 +243,7 @@ describe(`Test POST ${EndpointRoutes.group}`, () => {
 
     const res = await request(app)
       .post(route)
+      .set('my-hidden-access-token', token)
       .send(mockGroup);
     
     expect(res.statusCode).toBe(500);
@@ -191,9 +259,17 @@ describe(`Test PUT ${EndpointRoutes.group}`, () => {
   const groupId = '3';
   const route = `${EndpointRoutes.group}/${groupId}`;
 
+  test('403 status in response, when no token', async () => {
+    const res = await request(app)
+      .get(route);
+    
+      expect(res.statusCode).toBe(403);
+  });
+
   test("500 status in response, when invalid data was send", async () => {
     const res = await request(app)
       .put(route)
+      .set('my-hidden-access-token', token)
       .send({ invalidData: 'test' });
 
     expect(res.statusCode).toBe(500);
@@ -202,6 +278,7 @@ describe(`Test PUT ${EndpointRoutes.group}`, () => {
   test("GroupService.update wasn't called, when invalid data was send", async () => {
     await request(app)
       .put(route)
+      .set('my-hidden-access-token', token)
       .send({ invalidData: 'test' });
     
     expect(serviceUpdate.mock.calls.length).toBe(0);
@@ -210,6 +287,7 @@ describe(`Test PUT ${EndpointRoutes.group}`, () => {
   test('Call groupService.update 1 time, when valid data was send', async () => {
     await request(app)
       .put(route)
+      .set('my-hidden-access-token', token)
       .send(mockGroup);
     
     expect(serviceUpdate.mock.calls.length).toBe(1);
@@ -218,6 +296,7 @@ describe(`Test PUT ${EndpointRoutes.group}`, () => {
   test('Call groupService.update with passed groupId in params and groupDTO in body', async () => {
     await request(app)
       .put(route)
+      .set('my-hidden-access-token', token)
       .send(mockGroup);
     
     expect(serviceUpdate.mock.calls[0][0]).toEqual(groupId);
@@ -227,6 +306,7 @@ describe(`Test PUT ${EndpointRoutes.group}`, () => {
   test("200 status in response, when valid data was send", async () => {
     const res = await request(app)
       .put(route)
+      .set('my-hidden-access-token', token)
       .send(mockGroup);
     
       expect(res.statusCode).toBe(200);
@@ -237,6 +317,7 @@ describe(`Test PUT ${EndpointRoutes.group}`, () => {
 
     const res = await request(app)
       .put(route)
+      .set('my-hidden-access-token', token)
       .send(mockGroup);
     
     expect(res.statusCode).toBe(500);
@@ -252,23 +333,33 @@ describe(`Test DELETE ${EndpointRoutes.group}`, () => {
   const groupId = '3';
   const route = `${EndpointRoutes.group}/${groupId}`;
 
+  test('403 status in response, when no token', async () => {
+    const res = await request(app)
+      .get(route);
+    
+      expect(res.statusCode).toBe(403);
+  });
+
   test('Call groupService.delete 1 time', async () => {
     await request(app)
-      .delete(route);
+      .delete(route)
+      .set('my-hidden-access-token', token);
     
     expect(serviceRemove.mock.calls.length).toBe(1);
   });
 
   test('Call groupService.delete with passed groupId in params', async () => {
     await request(app)
-      .delete(route);
+      .delete(route)
+      .set('my-hidden-access-token', token);
     
     expect(serviceRemove.mock.calls[0][0]).toEqual(groupId);
   });
 
   test("200 status in response when no errors", async () => {
     const res = await request(app)
-      .delete(route);
+      .delete(route)
+      .set('my-hidden-access-token', token);
     
       expect(res.statusCode).toBe(200);
   });
@@ -277,7 +368,8 @@ describe(`Test DELETE ${EndpointRoutes.group}`, () => {
     serviceRemove.mockRejectedValueOnce(new Error('Some happens'));
 
     const res = await request(app)
-      .delete(route);
+      .delete(route)
+      .set('my-hidden-access-token', token);
     
     expect(res.statusCode).toBe(500);
   });
