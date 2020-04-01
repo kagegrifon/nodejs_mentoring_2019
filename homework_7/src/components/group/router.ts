@@ -16,21 +16,32 @@ const logError = getRouterErrorLogger({
 
 groupRouter.get('/', 
   async function (req, res) {
-    const groups = await groupService.getAll();
-    res.send(groups);
+    try {
+      const groups = await groupService.getAll();
+      res.send(groups);
+    } catch(error) {
+      logError('Something went wrong', req, res, error);
+      res.status(500).send(error);
+    }
   }
 );
 
 groupRouter.get('/:groupId', 
   async function (req, res) {
     const { groupId } = req.params;
-    const group = await groupService.get(groupId);
 
-    if (group) {
-      res.send(group);
-    } else {
-      infoLogger.log('info', `There is no group with such id: ${groupId}`);
-      res.status(404).send(`There is no group with such id: ${groupId}`);
+    try {
+      const group = await groupService.get(groupId);
+
+      if (group) {
+        res.send(group);
+      } else {
+        infoLogger.log('info', `There is no group with such id: ${groupId}`);
+        res.status(404).send(`There is no group with such id: ${groupId}`);
+      }
+    } catch(error) {
+      logError('Something went wrong', req, res, error);
+      res.status(500).send(error);
     }
   }
 );
@@ -45,7 +56,7 @@ groupRouter.post('/',
       res.send(`Request was successful done, new group was added. New group id = ${groupID}`);
     } catch(e) {
       logError('Error on create user', req, res, e);
-      res.status(400).send(e);
+      res.status(500).send(e);
     }  
   }
 );
@@ -60,12 +71,12 @@ groupRouter.put('/:groupId',
       const groupDTO = req.body;
 
       await groupService.update(groupId, groupDTO);
+      res.send(reportMessage);
     } catch(e) {
       logError('Error on update user', req, res, e);
       reportMessage = `Something went wrong, ${e.message}`;
+      res.status(500).send(e);
     }
-
-    res.send(reportMessage);
   }
 );
 
@@ -80,7 +91,7 @@ groupRouter.delete('/:groupId',
     } catch(e) {
       logError('Error on delete user', req, res, e);
       reportMessage = `Something went wrong, ${e.message}`;
-      res.status(400);
+      res.status(500);
     }
 
     res.send(reportMessage);

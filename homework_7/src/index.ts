@@ -1,5 +1,6 @@
 import express from 'express';
 
+import { EndpointRoutes } from './constants';
 import { userRouter } from './components/user/router';
 import { groupRouter } from './components/group/router';
 import { userGroupRouter } from './components/user_group/router';
@@ -13,15 +14,19 @@ const port = config.get('app.port');
 
 const cors = require('cors');
 
-app.listen(port, () => infoLogger.log('info', `Start listening on port ${port}`));
+export const server = app.listen(port, () => infoLogger.log('info', `Start listening on port ${port}`));
 
 app.use(cors())
 app.use(express.json());
-app.use(serverInfoLoggerHandler);
-app.use('/user', checkToken, userRouter);
-app.use('/group', checkToken, groupRouter);
-app.use('/user-group', checkToken, userGroupRouter); 
-app.use('/login', authRouter);
+// app.use(serverInfoLoggerHandler);
+// app.use(EndpointRoutes.user, checkToken, userRouter);
+app.use(EndpointRoutes.user, userRouter);
+// app.use(EndpointRoutes.group, checkToken, groupRouter);
+app.use(EndpointRoutes.group, groupRouter);
+app.use(EndpointRoutes.userGroup, checkToken, userGroupRouter); 
+app.use(EndpointRoutes.login, authRouter);
 
 process.on('uncaughtException', (error) => { exceptionLogger.log('error', 'Get uncaughtException error', error); });
 process.on('SIGTERM', () => { errorLogger.log('warn', 'Ocurred SIGTERM'); });
+
+export { app };
