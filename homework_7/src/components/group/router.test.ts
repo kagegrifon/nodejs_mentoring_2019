@@ -1,6 +1,5 @@
 import { app, server } from '../../index';
 import { EndpointRoutes } from '../../constants';
-import { infoLogger, errorLogger, exceptionLogger } from '../../logger';
 
 import { GroupService } from './service';
 import { GroupCreateProps, GroupUpdateProps, Permission, GroupServiceInterface } from './interfaces';
@@ -49,29 +48,7 @@ jest.mock('./service', () => ({
 
 const token = getToken({ userId: '3' }, SECRET);
 
-// afterAll((done) => {
-//   Promise.all([
-//     // new Promise(resolve => { server.close(resolve); }),
-//     // new Promise(resolve => { infoLogger.end(resolve); }),
-//     // new Promise(resolve => { errorLogger.end(resolve); }),
-//     // new Promise(resolve => { exceptionLogger.end(resolve); }),
-//   ]).then(done);
-  
-//   // server.close(done);
-
-//   // infoLogger.end();
-//   // errorLogger.end();
-//   // exceptionLogger.end(); 
-// });
-
-// beforeAll((done) => {
-//   const port = require('config').get('app.port');
-//   const startListening = function() {
-//     app.listen(port, done);
-//   };
-
-//   server.close(startListening);
-// });
+afterAll((done) => { server.close(done); });
 
 describe(`Test GET ${EndpointRoutes.group}`, () => {
   beforeEach(() => {

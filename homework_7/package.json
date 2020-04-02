@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest src",
+    "test": "jest src --maxWorkers=1",
     "build": "tsc",
     "dev-server": "nodemon --exec ts-node src/index.ts",
     "fulfill-db": "ts-node src/DB_utils/fulfill_DB_sequelize.ts",
