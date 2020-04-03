@@ -1,0 +1,1 @@
+{"version":3,"file":"DB_connection_config.js","sourceRoot":"","sources":["../../src/config/DB_connection_config.ts"],"names":[],"mappings":";;AAAa,QAAA,mBAAmB,GAAG;IACjC,WAAW;IACX,UAAU;IACV,KAAK;IACL;QACE,IAAI,EAAE,WAAW;QACjB,OAAO,EAAE,UAAU;KACpB;CACF,CAAC"}
